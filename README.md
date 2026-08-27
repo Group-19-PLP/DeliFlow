@@ -1,6 +1,6 @@
 # Reflex — Small Retail Logistics System 🇰🇪
 
-Reflex is a lightweight, robust delivery management platform designed specifically for small Kenyan retailers (electronics shops, pharmacies, hardware stores). It replaces chaotic, un-tracked WhatsApp loops and phone calls with structured, role-based dashboards and transactional data protection guards.
+Reflex is a lightweight, robust delivery management platform designed specifically for small Kenyan retailers (electronics shops, pharmacies, hardware stores). It replaces chaotic, untracked WhatsApp loops and phone calls with structured, role-based dashboards and transactional data-protection guards.
 
 This system was built, deployed, and defended as part of the **Power Learn Project Readiness Sprint**.
 
@@ -9,10 +9,10 @@ This system was built, deployed, and defended as part of the **Power Learn Proje
 ## 👥 Project Team Roles & Contributions
 
 Our team of four software engineering students split the sprint architecture and deliverables as follows:
-*   **Student A (Frontend Lead):** Developed the React interface shell, integrated the `html5-qrcode` mobile camera scanning components, and engineered the resilient HTTP polling loop.
-*   **Student B (Backend & DB Lead):** Authored the Flask REST API, designed the relational PostgreSQL schema, and built the strict backend sequential state transition machine.
-*   **Student C (DevOps & Testing):** Configured the unified GitHub Codespaces environment, wrote automated integration tests with `pytest`, managed deployments, and logged dry-run timing data.
-*   **Student D (Product & Defense Lead):** Created the executive narrative, drafted the presentation storyboard following the "one key takeaway per slide" rule, and documented the system's intentional architectural trade-offs.
+*   **Fredrick (Frontend Lead):** Developed the React interface shell, integrated the `html5-qrcode` mobile camera scanning components, and engineered the resilient HTTP polling loop.
+*   **Ryan (Backend & DB Lead):** Authored the Flask REST API, designed the relational PostgreSQL schema, and built the strict backend sequential state transition machine.
+*   **Evelyne (DevOps & Testing):** Configured the unified GitHub Codespaces environment, wrote automated integration tests with `pytest`, managed deployments, and logged dry-run timing data.
+*   **Emmanuel (Product & Defense Lead):** Created the executive narrative, drafted the presentation storyboard following the "one key takeaway per slide" rule, and documented the system's intentional architectural trade-offs.
 
 ---
 
