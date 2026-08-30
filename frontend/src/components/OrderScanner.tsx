@@ -6,7 +6,7 @@ interface ScannerProps {
   onVerificationComplete: (code: string) => void;
 }
 
-export default function OrderScanner({ requestId, onVerificationComplete }: ScannerProps) {
+export default function OrderScanner({ onVerificationComplete }: ScannerProps) {
   const [manualCode, setManualCode] = useState('');
   const [scanError, setScanError] = useState<string | null>(null);
 
