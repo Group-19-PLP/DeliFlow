@@ -1,11 +1,20 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, DeliveryRequest, DeliveryStatus, User, UserRole
 
 app = Flask(__name__)
-# Use SQLite for development, PostgreSQL for production
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reflex_db.db'
+
+# Configure database URI from environment (Render provides DATABASE_URL). Fall back to sqlite for local dev.
+# Some platforms (older Heroku/Render) provide a postgres:// URL; SQLAlchemy requires postgresql:// for psycopg2.
+db_uri = os.getenv("DATABASE_URL", os.getenv("SQLALCHEMY_DATABASE_URI", "sqlite:///reflex_db.db"))
+if isinstance(db_uri, str) and db_uri.startswith("postgres://"):
+    db_uri = db_uri.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize DB
 db.init_app(app)
 
 # Enable CORS for all routes
