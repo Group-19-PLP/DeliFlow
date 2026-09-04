@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_migrate import Migrate
 from models import db, DeliveryRequest, DeliveryStatus, User, UserRole
 
 app = Flask(__name__)
@@ -16,6 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize DB
 db.init_app(app)
+
+# THIS LINE IS REQUIRED TO REGISTER THE 'flask db' COMMAND
+migrate = Migrate(app, db)
 
 # Enable CORS for all routes
 CORS(app)
