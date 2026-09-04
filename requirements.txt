@@ -1,0 +1,11 @@
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+psycopg2-binary==2.9.9
+flask-cors==4.0.1
+Werkzeug==3.0.3
+# Production WSGI server for Render
+gunicorn==20.1.0
+
+# Development / test dependencies (uncomment if needed locally)
+# pytest==8.2.2
