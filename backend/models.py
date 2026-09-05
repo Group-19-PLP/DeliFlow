@@ -36,6 +36,15 @@ class DeliveryRequest(db.Model):
     verification_code = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "customer_name": self.customer_name,
+            "delivery_address": self.delivery_address,
+            "status": self.status.value,
+            "rider_id": self.rider_id,
+        }
+
     def update_status(self, new_status: DeliveryStatus):
         """Strict state machine logic to present to the examination panel."""
         allowed_transitions = {
