@@ -11,7 +11,9 @@ interface Delivery {
   rider_id: number | null;
 }
 
-const API_BASE = 'https://deliflow-flask-backend.onrender.com';
+const API_BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? '' : 'https://deliflow-flask-backend.onrender.com');
+
+const apiUrl = (path: string) => `${API_BASE}${path}`;
 
 export default function App() {
   const [currentRole, setCurrentRole] = useState<Role>('RETAILER');
@@ -37,7 +39,7 @@ export default function App() {
 
   const fetchDeliveries = async () => {
     try {
-      const res = await fetch('/api/deliveries');
+      const res = await fetch(apiUrl('/api/deliveries'));
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -56,9 +58,9 @@ export default function App() {
 
     try {
       console.log('API_BASE:', API_BASE);
-      console.log('Sending request to:', `${API_BASE}/api/deliveries`);
+      console.log('Sending request to:', apiUrl('/api/deliveries'));
       
-      const res = await fetch('/api/deliveries', {
+      const res = await fetch(apiUrl('/api/deliveries'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,7 +100,7 @@ export default function App() {
     setMessage('');
 
     try {
-      const res = await fetch(`/api/deliveries/${selectedDeliveryId}/status`, {
+      const res = await fetch(apiUrl(`/api/deliveries/${selectedDeliveryId}/status`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'ASSIGNED' })
@@ -124,7 +126,7 @@ export default function App() {
     setMessage('');
 
     try {
-      const res = await fetch(`/api/deliveries/${deliveryId}/status`, {
+      const res = await fetch(apiUrl(`/api/deliveries/${deliveryId}/status`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'PICKED_UP' })
@@ -153,7 +155,7 @@ export default function App() {
     setMessage('');
 
     try {
-      const res = await fetch(`/api/deliveries/${deliveryId}/verify`, {
+      const res = await fetch(apiUrl(`/api/deliveries/${deliveryId}/verify`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ verification_code: verificationCode })
