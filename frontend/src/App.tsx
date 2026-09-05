@@ -11,7 +11,7 @@ interface Delivery {
   rider_id: number | null;
 }
 
-const API_BASE = '';
+const API_BASE = 'https://deliflow-flask-backend.onrender.com';
 
 export default function App() {
   const [currentRole, setCurrentRole] = useState<Role>('RETAILER');
