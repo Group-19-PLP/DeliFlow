@@ -72,14 +72,8 @@ def get_all_deliveries():
             return jsonify({"error": str(e)}), 500
     
     # GET method
-    requests = DeliveryRequest.query.order_by(DeliveryRequest.created_at.desc()).all()
-    return jsonify([{
-        "id": r.id,
-        "customer_name": r.customer_name,
-        "delivery_address": r.delivery_address,
-        "status": r.status.value,
-        "rider_id": r.rider_id
-    } for r in requests]), 200
+    deliveries = DeliveryRequest.query.all()
+    return jsonify([delivery.to_dict() for delivery in deliveries]), 200
 
 @app.route('/api/deliveries/<int:request_id>/status', methods=['PATCH'])
 def update_delivery_status(request_id):
@@ -136,5 +130,11 @@ def verify_and_close_delivery(request_id):
         db.session.rollback()
         return jsonify({"error": "Internal ledger update crash error occurs"}), 500
 
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return jsonify({"error": "Resource not found"}), 404
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
