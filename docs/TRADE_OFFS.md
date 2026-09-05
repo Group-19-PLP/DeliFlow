@@ -1,19 +1,15 @@
-# Reflex System Design Trade-Off Log Sheet
-*Sprint Reference:* Technical MVP Boundary Document
+# Architectural Trade-Offs
 
----
+In engineering DeliFlow, our team had to balance developer velocity, system reliability, and real-world last-mile delivery constraints. Below are the primary architectural trade-offs we made:
 
-### 📉 Weak Point 1: HTTP Short Polling Network Resource Overhead
-*   *What it is:* The React application pulls operational data tables every 10 seconds rather than opening persistent socket pipelines.
-*   *Acceptable because:* It removes complex state infrastructure dependencies and connection state crashes on our Python cluster. This allowed us to devote 45% more sprint cycles toward validation models and offline field handling code routines.
-*   *Time-unlocked alternative:* Migrate network layers entirely onto a unidirectional Server-Sent Events (SSE) streaming infrastructure framework.
+### 1. HTTP Short-Polling vs. WebSockets
+*   **The Decision:** We implemented a 10-second HTTP polling loop on the React frontend to refresh the dispatch and rider queues, rather than using WebSockets (Socket.io/ActionCable).
+*   **The Trade-Off:** While WebSockets offer true real-time updates, they introduce significant complexity in deployment, load balancing, and handling dropped connections on spotty mobile networks. Short-polling guarantees state synchronization every 10 seconds and is highly resilient to connection drops, which is critical for riders in low-signal areas.
 
-### 📉 Weak Point 2: Storing Stateless JWT Auth State in LocalStorage
-*   *What it is:* Security tokens for authentication profiles are cached on browser client memory domains directly.
-*   *Acceptable because:* It completely bypasses the need for memory-heavy active session databases like Redis on the backend. This guarantees low operational latency targets on low-tier, free cloud server instances (Render).
-*   *Time-unlocked alternative:* Reconfigure middleware authorization layers to emit strictly isolated HttpOnly and SameSite signed secure cookies.
+### 2. Dual-Channel QR Scanner (Camera + Manual Fallback)
+*   **The Decision:** We integrated `html5-qrcode` for hardware scanning but strictly built a manual 6-digit alphanumeric fallback.
+*   **The Trade-Off:** Relying 100% on a camera scanner provides a magical UX, but in real-world Kenyan delivery scenarios, riders may have broken lenses, work in pitch-black lighting, or face strict browser camera permission blockers. The UI trade-off of having a manual entry field ensures 100% delivery completion rates regardless of hardware degradation.
 
-### 📉 Weak Point 3: Client-Side Clock Dependency for Offline Logs
-*   *What it is:* When a rider drops offline, the transaction log uses the phone's built-in system clock to generate tracking time labels.
-*   *Acceptable because:* Devising cross-network vector clocks or distributed synchronization protocols is out of scope for a one-week sprint build. The server forces a strict "Last-Write-Wins" resolution logic based on database storage arrival time entries.
-*   *Time-unlocked alternative:* Implement standard network event-sourcing structures paired with cryptographic hardware clock timestamps generated upon scanning.
+### 3. Render Free Tier Deployment vs. AWS/GCP
+*   **The Decision:** We deployed the web service and static site to Render instead of provisioning EC2 instances or Google Cloud Run.
+*   **The Trade-Off:** Render provides zero-configuration CI/CD directly from GitHub, maximizing our development speed. The trade-off is the "cold start" delay on the free tier (the API spins down after inactivity). For a production enterprise scale, we would migrate to a paid tier or AWS, but Render was optimal for this sprint.
