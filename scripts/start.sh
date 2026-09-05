@@ -17,5 +17,8 @@ else
   echo "[start.sh] 'flask' command not available in PATH; skipping migrations"
 fi
 
+echo "[start.sh] Ensuring database tables exist..."
+python -c "from app import app, db; context = app.app_context(); context.push(); db.create_all(); context.pop()"
+
 echo "[start.sh] Starting gunicorn on 0.0.0.0:${PORT}"
-exec gunicorn backend.app:app --bind 0.0.0.0:${PORT} --workers 2
+exec gunicorn app:app --bind 0.0.0.0:${PORT} --workers 2
