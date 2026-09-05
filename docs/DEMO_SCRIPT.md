@@ -26,4 +26,5 @@
 3. **Action:** Click **"Open Camera Scanner to Deliver"**. (The live hardware camera preview box mounts).
 4. **Action:** Type `RFX-900` into the manual backup fallback entry box (simulating a broken lens block state).
 5. **Action:** Click **"Verify"**. (The component updates instantly to a green checkmark indicating successful completion).
-6. **Talking Point (Student D):** *"If Rider Juma works in low-light settings or carries an older handset, camera scans can fail. By utilizing our secondary verification code endpoint fallback, he inputs the tracking sequence manually, confirming delivery safely without crashing the backend execution loop."*
+6. **Demonstrate Hardware Resilience:** Show the Rider view. Click the **"📷 Scan QR Code"** button to toggle the live camera feed (powered by `html5-qrcode`). Then, toggle back to **"Use Manual Entry Instead"** to demonstrate our fallback workflow in case a rider's camera is broken. Paste the 6-digit verification code and confirm the delivery.
+7. **Talking Point (Emmanuel):** *"If Rider Juma works in low-light settings or carries an older handset, camera scans can fail. By utilizing our secondary verification code endpoint fallback, he inputs the tracking sequence manually, confirming delivery safely without crashing the backend execution loop."*
