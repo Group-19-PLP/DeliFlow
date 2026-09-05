@@ -1,73 +1,48 @@
-# DeliFlow — Small Retail Logistics System 🇰🇪
+# 🚚 DeliFlow - Delivery Management System
 
-DeliFlow is a lightweight, robust delivery management platform designed specifically for small Kenyan retailers (electronics shops, pharmacies, hardware stores). It replaces chaotic, untracked WhatsApp loops and phone calls with structured, role-based dashboards and transactional data-protection guards.
+DeliFlow is a full-stack, role-based Delivery Management System designed to bridge the gap between dispatchers, retailer staff, and last-mile motorcycle riders. 
 
-This system was built, deployed, and defended as part of the **Power Learn Project Readiness Sprint**.
-
----
-
-## 👥 Project Team Roles & Contributions
-
-Our team of four software engineering students split the sprint architecture and deliverables as follows:
-*   **Fredrick (Frontend Lead):** Developed the React interface shell, integrated the `html5-qrcode` mobile camera scanning components, and engineered the resilient HTTP polling loop.
-*   **Ryan (Backend & DB Lead):** Authored the Flask REST API, designed the relational PostgreSQL schema, and built the strict backend sequential state transition machine.
-*   **Evelyne (DevOps & Testing):** Configured the unified GitHub Codespaces environment, wrote automated integration tests with `pytest`, managed deployments, and logged dry-run timing data.
-*   **Emmanuel (Product & Defense Lead):** Created the executive narrative, drafted the presentation storyboard following the "one key takeaway per slide" rule, and documented the system's intentional architectural trade-offs.
+**Live Demo (Frontend):** [https://deliflow-react-frontend.onrender.com](https://deliflow-react-frontend.onrender.com)  
+**Live API (Backend):** [https://deliflow-flask-backend.onrender.com](https://deliflow-flask-backend.onrender.com)  
+**System Architecture:** [View Architecture Docs](./docs/SYSTEM_ARCHITECTURE.md)
 
 ---
 
-## 🏗️ System Architecture & Tech Stack
+## 🛠 Tech Stack
 
-DeliFlow uses a highly defensible, production-grade tech stack optimized for quick iteration and strict transactional safety:
+### Frontend (Client-Side)
+*   **Framework:** React 18 + Vite (TypeScript)
+*   **Styling:** Tailwind CSS
+*   **Hardware Integration:** `html5-qrcode` (Dual-channel Mobile Scanner with manual alphanumeric fallback)
+*   **State Management:** React Hooks with resilient 10-second HTTP short-polling
+*   **Deployment:** Render (Static Site)
 
-*   **Frontend:** React, TypeScript, Vite, Tailwind CSS
-*   **Backend:** Python, Flask, SQLAlchemy ORM, Alembic
-*   **Database:** PostgreSQL (with explicit Enum status constraints)
-*   **Hardware Sync:** HTML5-QRcode Library with manual alphanumeric fallback inputs
-*   **DevOps:** GitHub Codespaces (`.devcontainer`), Vercel (Frontend), Render (Backend/Database)
+### Backend (Server-Side)
+*   **Framework:** Flask (Python 3.11)
+*   **WSGI Server:** Gunicorn
+*   **Database ORM:** Flask-SQLAlchemy
+*   **Migrations:** Flask-Migrate (Alembic)
+*   **Deployment:** Render (Web Service)
 
----
-
-## ⚙️ Core Engineering Design Decisions
-
-### 1. Robust HTTP Short Polling Sync Mechanism
-Instead of complex, infrastructure-heavy WebSockets, the frontend synchronizes active queues every 10 seconds via controlled polling. If a rider or dispatcher drops offline, the system gracefully traps the network failure, displays a non-intrusive alert banner, and attempts recovery cleanly without halting execution.
-
-### 2. Strict Sequential Backend State Machine
-To guarantee relational schema integrity under high concurrency, the database locks down delivery states strictly. An order can **never** bypass validation stages arbitrarily. The backend logic explicitly enforces:
-`PENDING` ➔ `ASSIGNED` ➔ `PICKED_UP` ➔ `DELIVERED`
-
-### 3. Dual-Channel Order Confirmation Scan
-Riders are equipped with an HTML5 hardware camera scanning view to verify delivery confirmation codes on-site. If a rider is working under poor illumination or possesses a device with a broken camera lens, they can switch immediately to a manual alphanumeric keyboard input fallback to resolve the shipment cleanly.
+### Database
+*   **Engine:** PostgreSQL (Hosted on Render)
 
 ---
 
-## 🚀 Quick Start with GitHub Codespaces
+## ✨ Key Features
 
-Our project is pre-configured for **GitHub Codespaces**, providing an instantaneous full-stack container sandbox with all languages and live databases automated:
-
-1. Click the green **Code** button on this repository.
-2. Select the **Codespaces** tab, then click **Create codespace on main**.
-3. Once initialization concludes, open your terminal and start the backend service:
-   ```bash
-   cd backend && python3 -m venv venv && source venv/bin/activate
-   pip install -r requirements.txt
-   flask run --port=5000
-   ```
-4. Split your terminal window and fire up the web application dashboard:
-   ```bash
-   cd frontend && npm install
-   npm run dev
-   ```
-5. Use the control selector module in the sidebar panel to rotate freely between **Retailer Staff**, **Dispatcher Desk**, and **Motorcycle Rider** persona workflows for demonstration testing.
+1.  **Role-Based Workspaces:** Dedicated operational views for Dispatchers, Retailers, and Riders.
+2.  **Strict State Machine Logic:** Deliveries strictly follow the `PENDING` ➔ `ASSIGNED` ➔ `PICKED_UP` ➔ `DELIVERED` lifecycle.
+3.  **Hardware-Resilient Verification:** Riders can verify deliveries using a live camera QR scanner or a manual 6-digit alphanumeric fallback for degraded hardware/lighting conditions.
+4.  **Graceful API Error Handling:** Fully JSON-compliant REST endpoints with isolated 404/500 error handlers.
 
 ---
 
-## 📊 Documentation Registry
+## 🚀 Local Development Setup
 
-All mandatory grading assets are version-controlled alongside the source code in the `docs/` folder:
-*   `docs/STORYBOARD.md` — Detailed presentation slide map adhering to the one-takeaway rule.
-*   `docs/TRADE_OFFS.md` — Log sheet detailing three intentional design shortcuts and their engineering justifications.
-*   `docs/DEFENSE_FRAMEWORK.md` — High-pressure cross-examination playbook utilizing **State ➔ Context ➔ Evidence**.
-*   `docs/DEMO_SCRIPT.md` — 3-minute operational execution timeline script for live presentations.
-
+### 1. Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
