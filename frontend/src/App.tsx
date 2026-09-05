@@ -359,7 +359,7 @@ export default function App() {
                         />
                       )}
                   </div>
-                ) : ( ... )}
+                ) : null}
                       <button 
                         onClick={() => handleConfirmDelivery(delivery.id)}
                         disabled={loading || delivery.status !== 'PICKED_UP'}
