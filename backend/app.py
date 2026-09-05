@@ -24,6 +24,16 @@ migrate = Migrate(app, db)
 # Enable CORS for all routes
 CORS(app)
 
+database_schema_ready = False
+
+
+@app.before_request
+def ensure_database_schema():
+    global database_schema_ready
+    if not database_schema_ready:
+        db.create_all()
+        database_schema_ready = True
+
 @app.route('/api/deliveries', methods=['GET', 'POST'])
 def get_all_deliveries():
     """Returns all requests for real-time dashboard polling sweeps or creates new delivery."""
