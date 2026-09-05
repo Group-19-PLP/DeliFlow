@@ -1,6 +1,6 @@
-# Reflex — Small Retail Logistics System 🇰🇪
+# DeliFlow — Small Retail Logistics System 🇰🇪
 
-Reflex is a lightweight, robust delivery management platform designed specifically for small Kenyan retailers (electronics shops, pharmacies, hardware stores). It replaces chaotic, untracked WhatsApp loops and phone calls with structured, role-based dashboards and transactional data-protection guards.
+DeliFlow is a lightweight, robust delivery management platform designed specifically for small Kenyan retailers (electronics shops, pharmacies, hardware stores). It replaces chaotic, untracked WhatsApp loops and phone calls with structured, role-based dashboards and transactional data-protection guards.
 
 This system was built, deployed, and defended as part of the **Power Learn Project Readiness Sprint**.
 
@@ -18,7 +18,7 @@ Our team of four software engineering students split the sprint architecture and
 
 ## 🏗️ System Architecture & Tech Stack
 
-Reflex uses a highly defensible, production-grade tech stack optimized for quick iteration and strict transactional safety:
+DeliFlow uses a highly defensible, production-grade tech stack optimized for quick iteration and strict transactional safety:
 
 *   **Frontend:** React, TypeScript, Vite, Tailwind CSS
 *   **Backend:** Python, Flask, SQLAlchemy ORM, Alembic
