@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 
 type Role = 'RETAILER' | 'DISPATCHER' | 'RIDER';
 type DeliveryStatus = 'PENDING' | 'ASSIGNED' | 'PICKED_UP' | 'DELIVERED';
@@ -23,6 +24,7 @@ export default function App() {
   const [selectedDeliveryId, setSelectedDeliveryId] = useState<number | null>(null);
   const [selectedRiderId, setSelectedRiderId] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [showScanner, setShowScanner] = useState(false);
 
   // Form state for retailer
   const [formData, setFormData] = useState({
@@ -333,15 +335,31 @@ export default function App() {
                       {loading ? 'Updating...' : 'Mark Picked Up'}
                     </button>
                     <div className={delivery.status === 'PICKED_UP' ? '' : 'opacity-50'}>
-                      {delivery.status === 'PICKED_UP' ? (
-                        <input
-                          type="password"
-                          placeholder="Verification Code"
-                          value={verificationCode}
-                          onChange={(e) => setVerificationCode(e.target.value)}
-                          className="w-full p-2 border border-gray-300 rounded text-sm mb-2"
+                     {delivery.status === 'PICKED_UP' ? (
+                      <div className="flex flex-col gap-2 mb-2">
+                        <button 
+                          onClick={() => setShowScanner(!showScanner)}
+                          className="bg-gray-200 text-gray-800 py-1 rounded text-sm font-bold w-full"
+                        >
+                          {showScanner ? 'Use Manual Entry Instead' : '📷 Scan QR Code'}
+                        </button>
+    
+                        {showScanner ? (
+                          <QRScanner onScan={(code) => {
+                            setVerificationCode(code);
+                            setShowScanner(false);
+                          }} />
+                        ) : (
+                          <input 
+                            type="password" 
+                            placeholder="Enter 6-Digit Code" 
+                            value={verificationCode} 
+                            onChange={(e) => setVerificationCode(e.target.value)} 
+                            className="w-full p-2 border border-gray-300 rounded text-sm" 
                         />
-                      ) : null}
+                      )}
+                  </div>
+                ) : ( ... )}
                       <button 
                         onClick={() => handleConfirmDelivery(delivery.id)}
                         disabled={loading || delivery.status !== 'PICKED_UP'}
@@ -363,4 +381,33 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+
+function QRScanner({ onScan }: { onScan: (text: string) => void }) {
+  useEffect(() => {
+    // Initializethe scanner when this component mounts
+    const scanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      false
+    );
+
+    scanner.render(
+      (decodedText) => {
+        onScan(decodedText);
+        scanner.clear(); // Stop scanning once a code is found
+      },
+      (errorMessage) => {
+        // Silently ignore continuous scanning errors
+      }
+    );
+
+    // Cleanup the camera on unmount
+    return () => {
+      scanner.clear().catch(console.error);
+    };
+  }, [onScan]);
+
+  return <div id="reader" className="w-full bg-white rounded overflow-hidden"></div>;
 }
