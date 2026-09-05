@@ -398,7 +398,7 @@ function QRScanner({ onScan }: { onScan: (text: string) => void }) {
         onScan(decodedText);
         scanner.clear(); // Stop scanning once a code is found
       },
-      (errorMessage) => {
+      () => {
         // Silently ignore continuous scanning errors
       }
     );
